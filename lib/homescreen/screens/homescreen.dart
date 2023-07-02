@@ -1,4 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ecommerce_test/homescreen/models/category_fetch.dart';
+import 'package:ecommerce_test/homescreen/models/products_model.dart';
 import 'package:ecommerce_test/homescreen/widgets/search_bar.dart';
 import 'package:ecommerce_test/util/app_assets.dart';
 import 'package:ecommerce_test/util/app_constants.dart';
@@ -8,7 +10,6 @@ import 'package:flutter/material.dart';
 import '../../util/app_color.dart';
 import '../../util/app_padding.dart';
 import '../../util/appbar.dart';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +21,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final List<Color> _colors = [Colors.black87, Colors.black12];
   final List<double> _stops = [0.0, 0.8];
+
+  final ProductFetch _productFetch = ProductFetch();
 
   @override
   Widget build(BuildContext context) {
@@ -93,59 +96,72 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          SizedBox(
-            height: 150,
-            width: MediaQuery.maybeOf(context)!.size.width,
-            child: ListView.builder(
-                padding: const EdgeInsets.only(left: 10),
-                itemCount: 10,
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Stack(
-                      children: [
-                        Stack(children: [
-                          Container(
-                            alignment: Alignment.bottomCenter,
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                  image: AssetImage(ThemeAssets.men),
-                                  fit: BoxFit.fill),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+          FutureBuilder<List<ProductModel>>(
+              future: _productFetch.getProducts(),
+              builder: (context, snapshot) {
+                var data = snapshot.data;
+                print(data);
+                if (!snapshot.hasData) {
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    backgroundColor: Colors.black,
+                    color: Colors.white10,
+                  ));
+                }
+                return SizedBox(
+                  height: 150,
+                  width: MediaQuery.maybeOf(context)!.size.width,
+                  child: ListView.builder(
+                      padding: const EdgeInsets.only(left: 10),
+                      itemCount: data!.length,
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Stack(
+                            children: [
+                              Stack(children: [
+                                Container(
+                                  alignment: Alignment.bottomCenter,
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    image: const DecorationImage(
+                                        image: AssetImage(ThemeAssets.men),
+                                        fit: BoxFit.fill),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: _colors,
+                                      stops: _stops,
+                                    ),
+                                  ),
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text(
+                                    data[index].title,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                            ],
                           ),
-                          Container(
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: _colors,
-                                stops: _stops,
-                              ),
-                            ),
-                            alignment: Alignment.bottomCenter,
-                            child: const Text(
-                              "Mens",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ]),
-                      ],
-                    ),
-                  );
-                }),
-          ),
+                        );
+                      }),
+                );
+              }),
           const ListViewWidget()
         ])));
   }
