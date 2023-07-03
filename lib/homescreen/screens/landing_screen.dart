@@ -1,9 +1,9 @@
+import 'package:ecommerce_test/profile/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../util/app_color.dart';
 import 'favourate_screen.dart';
 import 'homescreen.dart';
-import 'profile_screen.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});

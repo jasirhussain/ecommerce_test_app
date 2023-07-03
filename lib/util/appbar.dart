@@ -1,3 +1,4 @@
+import 'package:ecommerce_test/profile/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -14,6 +15,7 @@ class HomeAppBar extends StatelessWidget {
         InkWell(
           onTap: () {
            
+           Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen(),));
           },
           child: const CircleAvatar(
             radius: 25,

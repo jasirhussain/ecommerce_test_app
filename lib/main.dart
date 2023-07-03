@@ -1,9 +1,11 @@
+import 'package:ecommerce_test/homescreen/screens/landing_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'homescreen/screens/landing_screen.dart';
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -17,10 +19,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Ecommerce demo',
       theme: ThemeData(
-       primarySwatch: Colors.orange,
+        primarySwatch: Colors.orange,
         scaffoldBackgroundColor: const Color(0xffffffff),
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-
       ),
       home: const LandingScreen(),
     );
